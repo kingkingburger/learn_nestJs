@@ -14,4 +14,16 @@ export class AppController {
   postHello(): string {
     return this.appService.getHello();
   }
+
+  // req, res에 대해 알고 있는 부분
+  @Get('user') // GET /user
+  getUser(): string {
+    return this.appService.getUser();
+  }
+
+  @Post('user') // POST /user
+  postUser(): string {
+    // return this.appService.postUser();
+    return { code: 'SUCCESS', data: user };
+  }
 }
