@@ -15,7 +15,27 @@ const getEnv = async () => {
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true, load: [getEnv] })],
   controllers: [AppController],
-  providers: [AppService, ConfigService],
+  providers: [
+    AppService,
+    ConfigService,
+    {
+      provide: 'CUSTOM_KEY',
+      useValue: 'CUSTOM_VALUE',
+    },
+  ],
+  // providers: [
+  //   {
+  //     provide: AppService,
+  //     // useClass: AppService,
+  //     // useFactory: () => {
+  //     //   //작업중
+  //     //   return {
+  //     //     a: 'b',
+  //     //   };
+  //     // },
+  //   },
+  //   ConfigService,
+  // ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
