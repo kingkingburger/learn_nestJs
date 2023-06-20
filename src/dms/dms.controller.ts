@@ -10,6 +10,6 @@ export class DmsController {
   // getChat(@Query('perPage') perPage, @Query('page') page {
   //   console.log(query.perPage, query.page);
   // }
-  @Post(':id/chats')
-  postChat(@Body() body) {}
+  // @Post(':id/chats')
+  // postChat(@Body() body) {}
 }

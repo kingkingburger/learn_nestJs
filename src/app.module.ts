@@ -4,10 +4,10 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { UsersModule } from './users/users.module';
-import { WorkspacesModule } from './workspaces/workspaces.module';
 import { ChannelsModule } from './channels/channels.module';
 import { DmsService } from './dms/dms.service';
 import { DmsModule } from './dms/dms.module';
+import { WorkspacesModule } from './workspaces/workspaces.module';
 
 const getEnv = async () => {
   // const respose = await axios.get
@@ -18,7 +18,13 @@ const getEnv = async () => {
 };
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true, load: [getEnv] }), UsersModule, WorkspacesModule, ChannelsModule, DmsModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true, load: [getEnv] }),
+    UsersModule,
+    WorkspacesModule,
+    ChannelsModule,
+    DmsModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
