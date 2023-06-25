@@ -47,6 +47,8 @@ export class UsersController {
   login(@User() user) {
     return user;
   }
+  // 인터셉터를 쓰면 { data: user } 로 가공 가능
+  // 에러가 난 경우, exception filter를 사용
 
   @ApiOperation({ summary: '로그아웃' })
   @Post('logout')

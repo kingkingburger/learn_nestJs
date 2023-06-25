@@ -21,17 +21,24 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@adminjs/express": "^6.0.0",
+    "@adminjs/nestjs": "^6.0.1",
+    "@adminjs/typeorm": "^5.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.3",
     "@nestjs/core": "^9.0.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^7.0.2",
+    "adminjs": "^7.0.6",
+    "express-formidable": "^1.2.0",
+    "express-session": "^1.17.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "swagger-ui-express": "^4.6.3"
   },
   "devDependencies": {
+    "@babel/helper-compilation-targets": "^7.22.5",
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
