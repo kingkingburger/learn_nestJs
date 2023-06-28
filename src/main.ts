@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { UndefinedToNullInterceptor } from './common/interceptors/undefinedToNull.interceptor';
+import { TypeORMExceptionFilter } from './common/filter/typeormException.filter';
 
 declare const module: any;
 
@@ -9,6 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // 앱 전역에서 interceptor 쓰고 싶을 때
   // app.useGlobalInterceptors(new UndefinedToNullInterceptor());
+  app.useGlobalFilters(new TypeORMExceptionFilter());
   const port = process.env.PORT || 3000;
 
   const config = new DocumentBuilder()
