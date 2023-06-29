@@ -9,6 +9,14 @@ import { DmsService } from './dms/dms.service';
 import { DmsModule } from './dms/dms.module';
 import { WorkspacesModule } from './workspaces/workspaces.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ChannelChats } from './entities/ChannelChats';
+import { ChannelMembers } from './entities/ChannelMembers';
+import { Channels } from './entities/Channels';
+import { DMs } from './entities/DMs';
+import { Mentions } from './entities/Mentions';
+import { Users } from './entities/Users';
+import { WorkspaceMembers } from './entities/WorkspaceMembers';
+import { Workspaces } from './entities/Workspaces';
 const DEFAULT_ADMIN = {
   email: 'admin@example.com',
   password: 'password',
@@ -31,26 +39,26 @@ const authenticate = async (email: string, password: string) => {
 @Module({
   imports: [
     // AdminJS version 7 is ESM-only. In order to import it, you have to use dynamic imports.
-    import('@adminjs/nestjs').then(({ AdminModule }) =>
-      AdminModule.createAdminAsync({
-        useFactory: () => ({
-          adminJsOptions: {
-            rootPath: '/admin',
-            resources: [],
-          },
-          auth: {
-            authenticate,
-            cookieName: 'adminjs',
-            cookiePassword: 'secret',
-          },
-          sessionOptions: {
-            resave: true,
-            saveUninitialized: true,
-            secret: 'secret',
-          },
-        }),
-      }),
-    ),
+    // import('@adminjs/nestjs').then(({ AdminModule }) =>
+    //   AdminModule.createAdminAsync({
+    //     useFactory: () => ({
+    //       adminJsOptions: {
+    //         rootPath: '/admin',
+    //         resources: [],
+    //       },
+    //       auth: {
+    //         authenticate,
+    //         cookieName: 'adminjs',
+    //         cookiePassword: 'secret',
+    //       },
+    //       sessionOptions: {
+    //         resave: true,
+    //         saveUninitialized: true,
+    //         secret: 'secret',
+    //       },
+    //     }),
+    //   }),
+    // ),
     ConfigModule.forRoot({ isGlobal: true, load: [getEnv] }),
     UsersModule,
     WorkspacesModule,
@@ -58,14 +66,23 @@ const authenticate = async (email: string, password: string) => {
     DmsModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'loaclhost',
+      host: 'localhost',
       port: 5432,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [],
-      autoLoadEntities: true,
-      synchronize: true,
+      entities: [
+        ChannelChats,
+        ChannelMembers,
+        Channels,
+        DMs,
+        Mentions,
+        Users,
+        WorkspaceMembers,
+        Workspaces,
+      ],
+      // autoLoadEntities: true,
+      synchronize: false,
       logging: true,
       // keepConnectionAlive: true,
     }),
