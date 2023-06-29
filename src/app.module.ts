@@ -8,6 +8,7 @@ import { ChannelsModule } from './channels/channels.module';
 import { DmsService } from './dms/dms.service';
 import { DmsModule } from './dms/dms.module';
 import { WorkspacesModule } from './workspaces/workspaces.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 const DEFAULT_ADMIN = {
   email: 'admin@example.com',
   password: 'password',
@@ -55,6 +56,19 @@ const authenticate = async (email: string, password: string) => {
     WorkspacesModule,
     ChannelsModule,
     DmsModule,
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'loaclhost',
+      port: 5432,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
+      entities: [],
+      autoLoadEntities: true,
+      synchronize: true,
+      logging: true,
+      // keepConnectionAlive: true,
+    }),
   ],
   controllers: [AppController],
   providers: [

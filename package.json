@@ -30,12 +30,15 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^7.0.2",
+    "@nestjs/typeorm": "^10.0.0",
     "adminjs": "^7.0.6",
     "express-formidable": "^1.2.0",
     "express-session": "^1.17.3",
+    "pg": "^8.11.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
-    "swagger-ui-express": "^4.6.3"
+    "swagger-ui-express": "^4.6.3",
+    "typeorm": "^0.3.17"
   },
   "devDependencies": {
     "@babel/helper-compilation-targets": "^7.22.5",
