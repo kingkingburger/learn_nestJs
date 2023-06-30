@@ -34,10 +34,11 @@ export class UsersController {
     description: '성공',
     type: UserDto,
   })
+
   // 회원 가입 하는 정보
-  @ApiOperation({ summary: '로그인' })
+  @ApiOperation({ summary: '회원가입' })
   @Post()
-  postUsers(@Body() data: JoinRequestDto) {
+  join(@Body() data: JoinRequestDto) {
     // data를 service에 넘겨준다.
     this.usersService.postUsers(data.email, data.nickname, data.password);
   }
