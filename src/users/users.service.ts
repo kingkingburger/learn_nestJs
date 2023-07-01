@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from '../entities/Users';
 import { Repository } from 'typeorm';
@@ -9,27 +14,27 @@ export class UsersService {
     @InjectRepository(Users) private usersRepository: Repository<Users>,
   ) {}
   async postUsers(email: string, nickname: string, password: string) {
-    if (!email) {
-      // 이메일 없다고 에러
-      throw new Error('이메일이 없네요.');
-      return;
-    }
-    if (!nickname) {
-      // 이메일 없다고 에러
-      throw new Error('nickname 없네요.');
-      return;
-    }
-    if (!password) {
-      // 이메일 없다고 에러
-      throw new Error('password 없네요.');
-      return;
-    }
+    // if (!email) {
+    //   // 이메일 없다고 에러
+    //   throw new BadRequestException('이메일이 없네요.');
+    //   return;
+    // }
+    // if (!nickname) {
+    //   // 이메일 없다고 에러
+    //   throw new BadRequestException('nickname 없네요.');
+    //   return;
+    // }
+    // if (!password) {
+    //   // 이메일 없다고 에러
+    //   throw new BadRequestException('password 없네요.');
+    //   return;
+    // }
     const user = await this.usersRepository.findOne({
       where: { email: email },
     });
     if (user) {
       // 이미 존재하는 유저라고 애러
-      throw new Error('이미 존재하는 사용자입니다.');
+      throw new UnauthorizedException('이미 존재하는 사용자입니다.');
       return;
     }
     const hashedPassword = await bcrypt.hash(password, 12);
