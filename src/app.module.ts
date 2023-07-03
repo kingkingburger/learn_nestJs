@@ -8,7 +8,7 @@ import { ChannelsModule } from './channels/channels.module';
 import { DmsService } from './dms/dms.service';
 import { DmsModule } from './dms/dms.module';
 import { WorkspacesModule } from './workspaces/workspaces.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ChannelChats } from './entities/ChannelChats';
 import { ChannelMembers } from './entities/ChannelMembers';
 import { Channels } from './entities/Channels';
@@ -64,27 +64,57 @@ const authenticate = async (email: string, password: string) => {
     WorkspacesModule,
     ChannelsModule,
     DmsModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
-      entities: [
-        ChannelChats,
-        ChannelMembers,
-        Channels,
-        DMs,
-        Mentions,
-        Users,
-        WorkspaceMembers,
-        Workspaces,
-      ],
-      // autoLoadEntities: true,
-      synchronize: false,
-      logging: true,
-      // keepConnectionAlive: true,
+    // TypeOrmModule.forRoot({
+    //   type: 'postgres',
+    //   host: 'localhost',
+    //   port: 5432,
+    //   username: process.env.DB_USERNAME,
+    //   password: process.env.DB_PASSWORD,
+    //   database: process.env.DB_DATABASE,
+    //   entities: [
+    //     ChannelChats,
+    //     ChannelMembers,
+    //     Channels,
+    //     DMs,
+    //     Mentions,
+    //     Users,
+    //     WorkspaceMembers,
+    //     Workspaces,
+    //   ],
+    //   // autoLoadEntities: true,
+    //   synchronize: false,
+    //   logging: true,
+    //   // keepConnectionAlive: true,
+    // }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (
+        configService: ConfigService,
+      ): Promise<TypeOrmModuleOptions> => {
+        return {
+          type: 'postgres',
+          host: 'localhost',
+          port: 5432,
+          username: configService.getOrThrow('DB_USERNAME'),
+          password: configService.getOrThrow('DB_PASSWORD'),
+          database: configService.getOrThrow('DB_DATABASE'),
+          entities: [
+            ChannelChats,
+            ChannelMembers,
+            Channels,
+            DMs,
+            Mentions,
+            Users,
+            WorkspaceMembers,
+            Workspaces,
+          ],
+          // autoLoadEntities: true,
+          synchronize: true,
+          logging: true,
+          // keepConnectionAlive: true,
+        };
+      },
+      inject: [ConfigService],
     }),
   ],
   controllers: [AppController],
