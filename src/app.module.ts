@@ -17,6 +17,7 @@ import { Mentions } from './entities/Mentions';
 import { Users } from './entities/Users';
 import { WorkspaceMembers } from './entities/WorkspaceMembers';
 import { Workspaces } from './entities/Workspaces';
+import { AuthModule } from './auth/auth.module';
 const DEFAULT_ADMIN = {
   email: 'admin@example.com',
   password: 'password',
@@ -64,6 +65,7 @@ const authenticate = async (email: string, password: string) => {
     WorkspacesModule,
     ChannelsModule,
     DmsModule,
+    AuthModule,
     // TypeOrmModule.forRoot({
     //   type: 'postgres',
     //   host: 'localhost',

@@ -6,7 +6,7 @@ import { TypeORMExceptionFilter } from './common/filter/typeormException.filter'
 import { HttpExceptionFilter } from './common/filter/httpException.filter';
 import { AllExceptionFilter } from './common/filter/allException.filter';
 import { ValidationPipe } from '@nestjs/common';
-
+import passport from 'passport';
 declare const module: any;
 
 async function bootstrap() {
@@ -28,6 +28,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
+  app.use(passport.initialize()); // passport 설정
+  app.use(passport.session()); // passport 설정
   await app.listen(port);
   console.log(`listening on port ${port}`);
 
