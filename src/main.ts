@@ -28,8 +28,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  app.use(passport.initialize()); // passport 설정
-  app.use(passport.session()); // passport 설정
+  // app.use(passport.initialize()); // passport 설정
+  // app.use(passport.session()); // passport 설정
   await app.listen(port);
   console.log(`listening on port ${port}`);
 

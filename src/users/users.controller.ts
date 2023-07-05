@@ -41,7 +41,7 @@ export class UsersController {
   })
 
   // 회원 가입 하는 정보
-  @UseGuards(new NotLoggedInGuard())
+  // @UseGuards(new NotLoggedInGuard())
   @ApiOperation({ summary: '회원가입' })
   @Post()
   async join(@Body() data: JoinRequestDto) {
