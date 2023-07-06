@@ -64,7 +64,7 @@ export class Workspaces {
     onUpdate: 'CASCADE',
   })
   @JoinColumn([{ name: 'OwnerId', referencedColumnName: 'id' }])
-  Owner: Users;
+  Owner: Users | number;
 
   @ManyToMany(() => Users, (users) => users.Workspaces)
   Members: Users[];

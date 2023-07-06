@@ -54,5 +54,5 @@ export class Channels {
     onUpdate: 'CASCADE',
   })
   @JoinColumn([{ name: 'WorkspaceId', referencedColumnName: 'id' }])
-  Workspace: Workspaces;
+  Workspace: Workspaces | number;
 }

@@ -37,12 +37,12 @@ export class WorkspaceMembers {
     onUpdate: 'CASCADE',
   })
   @JoinColumn([{ name: 'WorkspaceId', referencedColumnName: 'id' }])
-  Workspace: Workspaces;
+  Workspace: Workspaces | number;
 
   @ManyToOne(() => Users, (users) => users.WorkspaceMembers, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
   @JoinColumn([{ name: 'UserId', referencedColumnName: 'id' }])
-  User: Users;
+  User: Users | number;
 }

@@ -62,6 +62,6 @@ export class UsersService {
       await queryRunner.release();
     }
   }
-
+  x;
   getUsers() {}
 }

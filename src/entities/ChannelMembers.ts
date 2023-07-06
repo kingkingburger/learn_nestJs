@@ -34,12 +34,12 @@ export class ChannelMembers {
     onUpdate: 'CASCADE',
   })
   @JoinColumn([{ name: 'ChannelId', referencedColumnName: 'id' }])
-  Channel: Channels;
+  Channel: Channels | number;
 
   @ManyToOne(() => Users, (users) => users.ChannelMembers, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
   @JoinColumn([{ name: 'UserId', referencedColumnName: 'id' }])
-  User: Users;
+  User: Users | number;
 }
