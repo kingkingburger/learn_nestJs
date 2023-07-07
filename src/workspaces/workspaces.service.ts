@@ -37,18 +37,25 @@ export class WorkspacesService {
     workspace.name = name;
     workspace.url = url;
     workspace.Owner = myId;
+
+    // workspace 만들어서
     const returned = await this.workspacesRepository.save(workspace);
     const workspaceMember = new WorkspaceMembers();
     workspaceMember.User = myId;
     workspaceMember.Workspace = returned.id;
+
+    // 채널에 나를 넣습니다.
     await this.workspaceMembersRepository.save(workspaceMember);
     const channel = new Channels();
     channel.name = '일반';
     channel.Workspace = returned.id;
+
+    // 채널에 나를 추가하기
     const channelReturned = await this.channelsRepository.save(channel);
     const channelMember = new ChannelMembers();
     channelMember.User = myId;
     channelMember.Channel = channelReturned.id;
+
     await this.channelMembersRepository.save(channelMember);
   }
 
@@ -57,6 +64,7 @@ export class WorkspacesService {
       .createQueryBuilder('user')
       .innerJoin('user.WorkspaceMembers', 'members')
       .innerJoin('members.Workspace', 'workspace', 'workspace.url = :url', {
+        // .innerJoin('members.Workspace', 'workspace', `workspace.url = ${url}`, { 가능은 한대 sql injection에 취약
         url,
       })
       .getMany();
