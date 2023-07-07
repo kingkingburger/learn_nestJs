@@ -73,6 +73,9 @@ export class WorkspacesService {
   async createWorkspaceMembers(url, email) {
     const workspace = await this.workspacesRepository.findOne({
       where: { url },
+      relations: {
+        Channels: true,
+      },
       join: {
         alias: 'workspace',
         innerJoinAndSelect: {
@@ -97,12 +100,16 @@ export class WorkspacesService {
   }
 
   async getWorkspaceMember(url: string, id: number) {
-    return this.usersRepository
-      .createQueryBuilder('user')
-      .where('user.id = :id', { id })
-      .innerJoin('user.Workspaces', 'workspaces', 'workspaces.url = :url', {
-        url,
-      })
-      .getOne();
+    return (
+      this.usersRepository
+        .createQueryBuilder('user')
+        .where('user.id = :id and user.name = :name', { id })
+        .andWhere('user.name = :name', { name })
+        // .where({ id, name })
+        .innerJoin('user.Workspaces', 'workspaces', 'workspaces.url = :url', {
+          url,
+        })
+        .getOne()
+    );
   }
 }

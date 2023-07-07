@@ -14,7 +14,7 @@ export class ChannelsController {
   createChannel() {}
 
   @Get(':name')
-  getSpecificChannels() {}
+  getSpecificChannels(@Param('name') name: string) {}
 
   @Post(':name/chats')
   postChat(@Body() body) {}
