@@ -45,5 +45,5 @@ export class ChannelChats {
     onUpdate: 'CASCADE',
   })
   @JoinColumn([{ name: 'ChannelId', referencedColumnName: 'id' }])
-  Channel: Channels;
+  Channel: Channels | number;
 }
