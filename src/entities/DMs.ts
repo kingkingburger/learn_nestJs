@@ -42,19 +42,19 @@ export class DMs {
     onUpdate: 'CASCADE',
   })
   @JoinColumn([{ name: 'WorkspaceId', referencedColumnName: 'id' }])
-  Workspace: Workspaces;
+  Workspace: Workspaces | number;
 
   @ManyToOne(() => Users, (users) => users.DMs, {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE',
   })
   @JoinColumn([{ name: 'SenderId', referencedColumnName: 'id' }])
-  Sender: Users;
+  Sender: Users | number;
 
   @ManyToOne(() => Users, (users) => users.DMs2, {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE',
   })
   @JoinColumn([{ name: 'ReceiverId', referencedColumnName: 'id' }])
-  Receiver: Users;
+  Receiver: Users | number;
 }

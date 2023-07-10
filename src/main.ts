@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { UndefinedToNullInterceptor } from './common/interceptors/undefinedToNull.interceptor';
 import { TypeORMExceptionFilter } from './common/filter/typeormException.filter';
-import { HttpExceptionFilter } from './common/filter/httpException.filter';
+import { HttpExceptionFilter } from './common/filter/http-exception.filter';
 import { AllExceptionFilter } from './common/filter/allException.filter';
 import { ValidationPipe } from '@nestjs/common';
 import passport from 'passport';
