@@ -5,7 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { UsersModule } from './users/users.module';
 import { ChannelsModule } from './channels/channels.module';
-import { DmsService } from './dms/dms.service';
+import { DMsService } from './dms/dms.service';
 import { DmsModule } from './dms/dms.module';
 import { WorkspacesModule } from './workspaces/workspaces.module';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
@@ -18,10 +18,11 @@ import { Users } from './entities/Users';
 import { WorkspaceMembers } from './entities/WorkspaceMembers';
 import { Workspaces } from './entities/Workspaces';
 import { AuthModule } from './auth/auth.module';
-const DEFAULT_ADMIN = {
-  email: 'admin@example.com',
-  password: 'password',
-};
+import { EventsModule } from './events/events.module';
+// const DEFAULT_ADMIN = {
+//   email: 'admin@example.com',
+//   password: 'password',
+// };
 const getEnv = async () => {
   // const respose = await axios.get
   return {
@@ -30,12 +31,12 @@ const getEnv = async () => {
   };
 };
 
-const authenticate = async (email: string, password: string) => {
-  if (email === DEFAULT_ADMIN.email && password === DEFAULT_ADMIN.password) {
-    return Promise.resolve(DEFAULT_ADMIN);
-  }
-  return null;
-};
+// const authenticate = async (email: string, password: string) => {
+//   if (email === DEFAULT_ADMIN.email && password === DEFAULT_ADMIN.password) {
+//     return Promise.resolve(DEFAULT_ADMIN);
+//   }
+//   return null;
+// };
 
 @Module({
   imports: [
@@ -118,6 +119,7 @@ const authenticate = async (email: string, password: string) => {
       },
       inject: [ConfigService],
     }),
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [
@@ -127,7 +129,7 @@ const authenticate = async (email: string, password: string) => {
       provide: 'CUSTOM_KEY',
       useValue: 'CUSTOM_VALUE',
     },
-    DmsService,
+    DMsService,
   ],
   // providers: [
   //   {
