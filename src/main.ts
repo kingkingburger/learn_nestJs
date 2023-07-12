@@ -7,16 +7,27 @@ import { HttpExceptionFilter } from './common/filter/http-exception.filter';
 import { AllExceptionFilter } from './common/filter/allException.filter';
 import { ValidationPipe } from '@nestjs/common';
 import passport from 'passport';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import path from 'path';
 declare const module: any;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   // 앱 전역에서 interceptor 쓰고 싶을 때
   // app.useGlobalInterceptors(new UndefinedToNullInterceptor());
   // app.useGlobalFilters(new TypeORMExceptionFilter());
   app.useGlobalPipes(new ValidationPipe()); // validate 검사기
   app.useGlobalFilters(new HttpExceptionFilter()); // httpException 검사기
   const port = process.env.PORT || 3000;
+
+  app.enableCors({
+    origin: true,
+    credentials: true,
+  });
+
+  app.useStaticAssets(path.join(__dirname, '..', 'uploads'), {
+    prefix: '/uploads',
+  });
 
   const config = new DocumentBuilder()
     .setTitle('Sleact API')
