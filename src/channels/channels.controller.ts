@@ -96,21 +96,21 @@ export class ChannelsController {
     );
   }
 
-  // @ApiOperation({ summary: '워크스페이스 특정 채널 채팅 생성하기' })
-  // @Post(':url/channels/:name/chats')
-  // async createWorkspaceChannelChats(
-  //   @Param('url') url,
-  //   @Param('name') name,
-  //   @Body('content') content,
-  //   @User() user: Users,
-  // ) {
-  //   return this.channelsService.createWorkspaceChannelChats(
-  //     url,
-  //     name,
-  //     content,
-  //     user.id,
-  //   );
-  // }
+  @ApiOperation({ summary: '워크스페이스 특정 채널 채팅 생성하기' })
+  @Post(':url/channels/:name/chats')
+  async createWorkspaceChannelChats(
+    @Param('url') url,
+    @Param('name') name,
+    @Body('content') content,
+    @User() user: Users,
+  ) {
+    return this.channelsService.createWorkspaceChannelChats(
+      url,
+      name,
+      content,
+      user.id,
+    );
+  }
 
   @ApiOperation({ summary: '워크스페이스 특정 채널 이미지 업로드하기' })
   @UseInterceptors(

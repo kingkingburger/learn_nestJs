@@ -46,7 +46,7 @@ export class UsersController {
   @Post()
   async join(@Body() data: JoinRequestDto) {
     // data를 service에 넘겨준다.
-    await this.usersService.postUsers(data.email, data.nickname, data.password);
+    await this.usersService.join(data.email, data.nickname, data.password);
   }
 
   @ApiOperation({ summary: '로그인' })

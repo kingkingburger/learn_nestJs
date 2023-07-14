@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThan, Repository } from 'typeorm';
 import { ChannelChats } from '../entities/ChannelChats';
@@ -6,7 +6,7 @@ import { ChannelMembers } from '../entities/ChannelMembers';
 import { Channels } from '../entities/Channels';
 import { Users } from '../entities/Users';
 import { Workspaces } from '../entities/Workspaces';
-// import { EventsGateway } from '../events/events.gateway';
+import { EventsGateway } from '../events/events.gateway';
 
 @Injectable()
 export class ChannelsService {
@@ -20,7 +20,8 @@ export class ChannelsService {
     @InjectRepository(ChannelChats)
     private channelChatsRepository: Repository<ChannelChats>,
     @InjectRepository(Users)
-    private usersRepository: Repository<Users>, // private readonly eventsGateway: EventsGateway,
+    private usersRepository: Repository<Users>,
+    private readonly eventsGateway: EventsGateway,
   ) {}
 
   async findById(id: number) {
@@ -90,7 +91,7 @@ export class ChannelsService {
       .where('channel.name = :name', { name })
       .getOne();
     if (!channel) {
-      throw new NotFoundException('채널이 존재하지 않습니다'); // TODO: 이 때 어떻게 에러 발생?
+      return null; // TODO: 이 때 어떻게 에러 발생?
     }
     const user = await this.usersRepository
       .createQueryBuilder('user')
@@ -108,10 +109,9 @@ export class ChannelsService {
     await this.channelMembersRepository.save(channelMember);
   }
 
-  // 채팅들을 가져오는 것
   async getWorkspaceChannelChats(
-    url: string, // 인덱스 걸어주기
-    name: string, // 인덱스 걸어주기
+    url: string,
+    name: string,
     perPage: number,
     page: number,
   ) {
@@ -130,33 +130,33 @@ export class ChannelsService {
       .getMany();
   }
 
-  // async createWorkspaceChannelChats(
-  //   url: string,
-  //   name: string,
-  //   content: string,
-  //   myId: number,
-  // ) {
-  //   const channel = await this.channelsRepository
-  //     .createQueryBuilder('channel')
-  //     .innerJoin('channel.Workspace', 'workspace', 'workspace.url = :url', {
-  //       url,
-  //     })
-  //     .where('channel.name = :name', { name })
-  //     .getOne();
-  //   const chats = new ChannelChats();
-  //   chats.content = content;
-  //   chats.User = myId;
-  //   chats.Channel = channel.id;
-  //   const savedChat = await this.channelChatsRepository.save(chats);
-  //   const chatWithUser = await this.channelChatsRepository.findOne({
-  //     where: { id: savedChat.id },
-  //     relations: ['User', 'Channel'],
-  //   });
-  //   this.eventsGateway.server
-  //     // .of(`/ws-${url}`)
-  //     .to(`/ws-${url}-${chatWithUser.ChannelId}`)
-  //     .emit('message', chatWithUser);
-  // }
+  async createWorkspaceChannelChats(
+    url: string,
+    name: string,
+    content: string,
+    myId: number,
+  ) {
+    const channel = await this.channelsRepository
+      .createQueryBuilder('channel')
+      .innerJoin('channel.Workspace', 'workspace', 'workspace.url = :url', {
+        url,
+      })
+      .where('channel.name = :name', { name })
+      .getOne();
+    const chats = new ChannelChats();
+    chats.content = content;
+    chats.User = myId;
+    chats.Channel = channel.id;
+    const savedChat = await this.channelChatsRepository.save(chats);
+    const chatWithUser = await this.channelChatsRepository.findOne({
+      where: { id: savedChat.id },
+      relations: ['User', 'Channel'],
+    });
+    this.eventsGateway.server
+      // .of(`/ws-${url}`)
+      .to(`/ws-${url}-${chatWithUser.Channel}`)
+      .emit('message', chatWithUser);
+  }
 
   async createWorkspaceChannelImages(
     url: string,
@@ -182,16 +182,14 @@ export class ChannelsService {
         where: { id: savedChat.id },
         relations: ['User', 'Channel'],
       });
-      // this.eventsGateway.server
-      //   // .of(`/ws-${url}`)
-      //   .to(`/ws-${url}-${chatWithUser.ChannelId}`)
-      //   .emit('message', chatWithUser);
+      this.eventsGateway.server
+        // .of(`/ws-${url}`)
+        .to(`/ws-${url}-${chatWithUser.Channel}`)
+        .emit('message', chatWithUser);
     }
   }
 
-  // 내가 안읽은 메세지 보여주기
   async getChannelUnreadsCount(url, name, after) {
-    // 1. 채널 찾기
     const channel = await this.channelsRepository
       .createQueryBuilder('channel')
       .innerJoin('channel.Workspace', 'workspace', 'workspace.url = :url', {
@@ -199,13 +197,10 @@ export class ChannelsService {
       })
       .where('channel.name = :name', { name })
       .getOne();
-
-    // 2. 채널에서 after 날짜보다 더 큰값 가져오기
     return this.channelChatsRepository.count({
-      // count(*)
       where: {
         Channel: channel.id,
-        createdAt: MoreThan(new Date(after)), // createdAt => "2023-07-09
+        createdAt: MoreThan(new Date(after)),
       },
     });
   }
