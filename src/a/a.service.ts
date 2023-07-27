@@ -12,8 +12,8 @@ export class AService {
     @InjectRepository(A) private readonly aRepository: Repository<A>,
   ) {}
 
-  create(createADto: CreateADto) {
-    return 'This action adds a new a';
+  async create(createADto: CreateADto) {
+    return await this.aRepository.save(createADto);
   }
 
   async findAll(name) {
@@ -28,11 +28,7 @@ export class AService {
       where: { name: name },
       relations: {
         Bs: true,
-        // Cs: {
-        //   Bs: true,
-        // },
       },
-      // select: BAttribute,
     });
   }
   async findAllt(name) {
@@ -52,11 +48,11 @@ export class AService {
     return `This action returns a #${id} a`;
   }
 
-  update(id: number, updateADto: UpdateADto) {
-    return `This action updates a #${id} a`;
+  async update(id: number, updateADto: UpdateADto) {
+    return await this.aRepository.update(id, updateADto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} a`;
+  async remove(id: number) {
+    return await this.aRepository.delete(id);
   }
 }
