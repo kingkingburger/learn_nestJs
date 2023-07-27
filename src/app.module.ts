@@ -22,6 +22,8 @@ import { AModule } from './a/a.module';
 import { BModule } from './b/b.module';
 import { B } from './b/entities/b.entity';
 import { A } from './a/entities/a.entity';
+import { CModule } from './c/c.module';
+import { C } from './c/entities/c.entity';
 
 @Module({
   imports: [
@@ -45,6 +47,7 @@ import { A } from './a/entities/a.entity';
         Workspaces,
         A,
         B,
+        C,
       ],
       keepConnectionAlive: true,
       migrations: [__dirname + '/migrations/*.ts'],
@@ -58,6 +61,7 @@ import { A } from './a/entities/a.entity';
     DMsModule,
     AModule,
     BModule,
+    CModule,
   ],
   controllers: [AppController],
   providers: [AppService],

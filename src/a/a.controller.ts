@@ -25,6 +25,10 @@ export class AController {
   findAll(@Query('name') name: string) {
     return this.aService.findAll(name);
   }
+  @Get('/t')
+  findAllt(@Query('name') name: string) {
+    return this.aService.findAllt(name);
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

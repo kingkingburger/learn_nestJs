@@ -3,9 +3,11 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { B } from '../../b/entities/b.entity';
+import { C } from '../../c/entities/c.entity';
 
 @Entity({ schema: 'sleact' })
 export class A {
@@ -28,4 +30,7 @@ export class A {
     },
   })
   Bs: B[];
+
+  @OneToMany(() => C, (c) => c.As)
+  Cs: C[];
 }
