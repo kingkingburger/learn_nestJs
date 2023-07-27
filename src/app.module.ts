@@ -18,6 +18,10 @@ import { Users } from './entities/Users';
 import { WorkspaceMembers } from './entities/WorkspaceMembers';
 import { Workspaces } from './entities/Workspaces';
 import { DMsModule } from './dms/DMsModule';
+import { AModule } from './a/a.module';
+import { BModule } from './b/b.module';
+import { B } from './b/entities/b.entity';
+import { A } from './a/entities/a.entity';
 
 @Module({
   imports: [
@@ -39,6 +43,8 @@ import { DMsModule } from './dms/DMsModule';
         Users,
         WorkspaceMembers,
         Workspaces,
+        A,
+        B,
       ],
       keepConnectionAlive: true,
       migrations: [__dirname + '/migrations/*.ts'],
@@ -50,6 +56,8 @@ import { DMsModule } from './dms/DMsModule';
     WorkspacesModule,
     ChannelsModule,
     DMsModule,
+    AModule,
+    BModule,
   ],
   controllers: [AppController],
   providers: [AppService],
