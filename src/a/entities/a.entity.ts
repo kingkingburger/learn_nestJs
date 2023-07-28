@@ -19,7 +19,7 @@ export class A {
 
   @ManyToMany(() => B, (b) => b.As)
   @JoinTable({
-    name: 'ab',
+    name: 'c',
     joinColumn: {
       name: 'AId',
       referencedColumnName: 'id',

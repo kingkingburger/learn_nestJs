@@ -24,12 +24,34 @@ export class AService {
     //   .getMany();
     // return result;
 
-    return await this.aRepository.find({
+    // return await this.aRepository.find({
+    //   where: { name: name },
+    //   // relations: ['Bs'],
+    //   relations: {
+    //     Cs: {
+    //       Bs: true,
+    //     },
+    //   },
+    // });
+    const fullData = await this.aRepository.find({
       where: { name: name },
       relations: {
-        Bs: true,
+        Cs: {
+          Bs: true,
+        },
       },
     });
+
+    const filteredData = fullData.map((item) => {
+      return {
+        // Spread the original item data
+        ...item,
+        // Replace Cs with just the Bs data
+        Cs: item.Cs.map((csItem) => csItem.Bs),
+      };
+    });
+
+    return filteredData;
   }
   async findAllt(name) {
     // const result = await this.aRepository

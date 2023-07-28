@@ -7,9 +7,17 @@ export class C {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => A, (a) => a.Cs, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @ManyToOne(() => A, (a) => a.Cs, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+    nullable: true,
+  })
   As: A[];
 
-  @ManyToOne(() => B, (b) => b.Cs, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @ManyToOne(() => B, (b) => b.Cs, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+    nullable: true,
+  })
   Bs: B[];
 }
