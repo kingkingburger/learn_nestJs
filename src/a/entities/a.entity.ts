@@ -17,9 +17,9 @@ export class A {
   @Column()
   name: string;
 
-  @ManyToMany(() => B, (b) => b.As)
+  @ManyToMany(() => B, (b) => b.As, { cascade: true })
   @JoinTable({
-    name: 'c',
+    name: 'abs',
     joinColumn: {
       name: 'AId',
       referencedColumnName: 'id',

@@ -4,7 +4,8 @@ import { UpdateADto } from './dto/update-a.dto';
 import { Repository } from 'typeorm';
 import { A } from './entities/a.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BAttribute } from '../b/entities/b.entity';
+import { CreateBDto } from '../b/dto/create-b.dto';
+import { B } from '../b/entities/b.entity';
 
 @Injectable()
 export class AService {
@@ -13,26 +14,11 @@ export class AService {
   ) {}
 
   async create(createADto: CreateADto) {
+    createADto.Bs = [{ name: 'b Test' }] as B[];
     return await this.aRepository.save(createADto);
   }
 
   async findAll(name) {
-    // const result = await this.aRepository
-    //   .createQueryBuilder('a')
-    //   .where('a.name = :name', { name })
-    //   .innerJoin('a.Bs', 'bs')
-    //   .getMany();
-    // return result;
-
-    // return await this.aRepository.find({
-    //   where: { name: name },
-    //   // relations: ['Bs'],
-    //   relations: {
-    //     Cs: {
-    //       Bs: true,
-    //     },
-    //   },
-    // });
     const fullData = await this.aRepository.find({
       where: { name: name },
       relations: {
@@ -43,23 +29,18 @@ export class AService {
     });
 
     const filteredData = fullData.map((item) => {
+      // Create a copy of the item object without the 'Cs' property
+      const { Cs, ...itemWithoutCs } = item;
       return {
-        // Spread the original item data
-        ...item,
+        // Spread the original item data without 'Cs'
+        ...itemWithoutCs,
         // Replace Cs with just the Bs data
-        Cs: item.Cs.map((csItem) => csItem.Bs),
+        Bs: item.Cs.map((csItem) => csItem.Bs), // Change 'Cs' to 'Bs' here
       };
     });
-
     return filteredData;
   }
   async findAllt(name) {
-    // const result = await this.aRepository
-    //   .createQueryBuilder('a')
-    //   .where('a.name = :name', { name })
-    //   .innerJoin('a.Bs', 'bs')
-    //   .getMany();
-    // return result;
     return await this.aRepository.find({
       where: { name: name },
       relations: { Bs: true },
