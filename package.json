@@ -54,6 +54,7 @@
     "cross-env": "^7.0.3",
     "express-formidable": "^1.2.0",
     "express-session": "^1.17.3",
+    "nest-winston": "^1.9.4",
     "npm-check-updates": "^16.10.15",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
@@ -64,7 +65,9 @@
     "socket.io": "^4.7.1",
     "swagger-ui-express": "^5.0.0",
     "typeorm": "^0.3.17",
-    "typeorm-extension": "^2.8.1"
+    "typeorm-extension": "^2.8.1",
+    "winston": "^3.10.0",
+    "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
     "@babel/helper-compilation-targets": "^7.22.6",

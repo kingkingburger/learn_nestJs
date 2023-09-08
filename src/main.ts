@@ -9,10 +9,14 @@ import { ValidationPipe } from '@nestjs/common';
 import passport from 'passport';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import path from 'path';
+import { winstonLogger } from './common/logger/winston.util';
 declare const module: any;
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    cors: true,
+    logger: winstonLogger,
+  });
   // 앱 전역에서 interceptor 쓰고 싶을 때
   // app.useGlobalInterceptors(new UndefinedToNullInterceptor());
   // app.useGlobalFilters(new TypeORMExceptionFilter());
