@@ -1,11 +1,17 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  HttpException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, EntityManager, Repository } from 'typeorm';
 import bcrypt from 'bcrypt';
 import { ChannelMembers } from '../entities/ChannelMembers';
 
 import { Users } from '../entities/Users';
 import { WorkspaceMembers } from '../entities/WorkspaceMembers';
+import { HttpExceptionFilter } from '../common/filter/http-exception.filter';
 
 @Injectable()
 export class UsersService {
@@ -29,14 +35,16 @@ export class UsersService {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
-    const user = await queryRunner.manager
-      .getRepository(Users)
-      .findOne({ where: { email } });
-    if (user) {
-      throw new ForbiddenException('이미 존재하는 사용자입니다');
-    }
-    const hashedPassword = await bcrypt.hash(password, 12);
     try {
+      const user = await queryRunner.manager
+        .getRepository(Users)
+        .findOne({ where: { email } });
+      if (user) {
+        throw new ForbiddenException('이미 존재하는 사용자입니다');
+      }
+      const hashedPassword = await bcrypt.hash(password, 12);
+      // throw new NotFoundException('롤백해봐');
+
       const returned = await queryRunner.manager.getRepository(Users).save({
         email,
         nickname,
@@ -55,13 +63,42 @@ export class UsersService {
         ChannelId: 1,
       });
       await queryRunner.commitTransaction();
+
       return true;
     } catch (error) {
       console.error(error);
       await queryRunner.rollbackTransaction();
       throw error;
     } finally {
+      console.log('이거 실행됨?');
       await queryRunner.release();
     }
   }
+
+  // async join(
+  //   email: string,
+  //   nickname: string,
+  //   password: string,
+  //   // queryRunnerManager: EntityManager,
+  // ) {
+  //   const queryRunner = this.dataSource.createQueryRunner();
+  //   // const queryRunner = queryRunnerManager.queryRunner;
+  //   await queryRunner.connect();
+  //   await queryRunner.startTransaction();
+  //
+  //   try {
+  //     throw new NotFoundException('롤백해봐');
+  //
+  //     return true;
+  //   } catch (error) {
+  //     console.error(error);
+  //     await queryRunner.rollbackTransaction();
+  //     await queryRunner.release();
+  //
+  //     // throw error;
+  //   } finally {
+  //     console.log('이거 실행됨?');
+  //     await queryRunner.release();
+  //   }
+  // }
 }

@@ -18,6 +18,9 @@ import { UndefinedToNullInterceptor } from '../common/interceptors/undefinedToNu
 import { LocalAuthGuard } from '../auth/local-auth.guard';
 import { NotLoggedInGuard } from '../auth/not-logged-in.guard';
 import { LoggedInGuard } from '../auth/logged-in.guard';
+import { TransactionInterceptor } from '../common/interceptors/transaction.interceptor';
+import { TransactionManager } from '../common/decorators/transaction.decorator';
+import { EntityManager } from 'typeorm';
 
 @UseInterceptors(UndefinedToNullInterceptor)
 @ApiTags('USER')
@@ -44,10 +47,36 @@ export class UsersController {
   // @UseGuards(new NotLoggedInGuard())
   @ApiOperation({ summary: '회원가입' })
   @Post()
-  async join(@Body() data: JoinRequestDto) {
+  // @UseInterceptors(TransactionInterceptor)
+  async join(
+    @Body() data: JoinRequestDto,
+    // @TransactionManager() queryRunnerManager: EntityManager,
+  ) {
     // data를 service에 넘겨준다.
-    await this.usersService.join(data.email, data.nickname, data.password);
+    await this.usersService.join(
+      data.email,
+      data.nickname,
+      data.password,
+      // queryRunnerManager,
+    );
   }
+  // 회원 가입 하는 정보
+  // @UseGuards(new NotLoggedInGuard())
+  // @ApiOperation({ summary: '회원가입' })
+  // @Post()
+  // @UseInterceptors(TransactionInterceptor)
+  // async join(
+  //   @Body() data: JoinRequestDto,
+  //   // @TransactionManager() queryRunnerManager: EntityManager,
+  // ) {
+  //   // data를 service에 넘겨준다.
+  //   await this.usersService.join(
+  //     data.email,
+  //     data.nickname,
+  //     data.password,
+  //     // queryRunnerManager,
+  //   );
+  // }
 
   @ApiOperation({ summary: '로그인' })
   @UseGuards(LocalAuthGuard)
