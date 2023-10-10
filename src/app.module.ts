@@ -29,6 +29,7 @@ import * as winston from 'winston';
 import { transports } from 'winston';
 import dayjs from 'dayjs';
 import { Module } from '@nestjs/common';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -106,6 +107,7 @@ import { Module } from '@nestjs/common';
     AModule,
     BModule,
     CModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -23,4 +23,8 @@ export class AppController {
     }
     return this.appService.getHello2();
   }
+  @Get('/redis') // GET
+  redisTest() {
+    return this.appService.redisTest();
+  }
 }
